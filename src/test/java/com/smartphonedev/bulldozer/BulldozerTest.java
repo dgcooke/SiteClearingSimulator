@@ -4,12 +4,10 @@ import com.smartphonedev.site.Direction;
 import com.smartphonedev.site.Position;
 import com.smartphonedev.site.Site;
 import org.junit.jupiter.api.Test;
-
 import java.util.Arrays;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class BulldozerTest {
 

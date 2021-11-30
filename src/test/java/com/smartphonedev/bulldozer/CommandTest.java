@@ -1,17 +1,9 @@
 package com.smartphonedev.bulldozer;
 
-import static org.junit.jupiter.api.Assertions.*;
-import com.smartphonedev.site.*;
 import org.junit.jupiter.api.Test;
-
-import javax.swing.text.html.Option;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class CommandTest {
 
