@@ -1,12 +1,13 @@
 package com.smartphonedev.site;
 
-import javax.swing.text.html.Option;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public final class Site
 {
     private final static int ARRAY_START = 0;
+    private final static int HOME_POSITION = 0;
     private Terrain[][] site;
     private Optional<Position> position;
     private static Site instance;
@@ -56,21 +57,38 @@ public final class Site
         return Optional.empty();
     }
 
+    public boolean validatePosition(Position proposedPosition)
+    {
+        var proposedRow = proposedPosition.row();
+        var poropsedColumn = proposedPosition.column();
+
+        if((proposedRow >= HOME_POSITION) && (proposedPosition.row() < site.length))
+        {
+            if((poropsedColumn >= HOME_POSITION) && (poropsedColumn < site[proposedRow].length))
+            {
+                getTerrainAtPosition(proposedPosition).enterBlock();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Terrain getTerrainAtPosition(Position position)
+    {
+        return site[position.row()][position.column()];
+    }
+
     public void printSiteMap()
     {
         if(instance != null)
         {
-            var output = new String[site.length][site[ARRAY_START].length];
             var rowPosition = 0;
-            var columnPosition = 0;
-
             while(rowPosition < site.length)
             {
                 Terrain[] siteRow = site[rowPosition];
                 for(var terrain: siteRow)
                 {
                     System.out.print(terrain.print());
-                    columnPosition++;
                 }
                 System.out.print("\n");
                 rowPosition++;
@@ -78,4 +96,22 @@ public final class Site
         }
     }
 
+    public Integer calculateFuelUsaga() {
+        var totalFuelConsumed = 0;
+        if(instance != null)
+        {
+            var rowPosition = 0;
+            while(rowPosition < site.length)
+            {
+                Terrain[] siteRow = site[rowPosition];
+                for(var terrain: siteRow)
+                {
+                    //System.out.println(terrain.getFuelConsumed());
+                    totalFuelConsumed += terrain.getFuelConsumed();
+                }
+                rowPosition++;
+            }
+        }
+        return totalFuelConsumed;
+    }
 }

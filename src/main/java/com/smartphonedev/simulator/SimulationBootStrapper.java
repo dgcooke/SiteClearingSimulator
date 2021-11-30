@@ -1,6 +1,5 @@
 package com.smartphonedev.simulator;
 
-import com.smartphonedev.exceptions.MissingMapException;
 import com.smartphonedev.site.Site;
 import lombok.Getter;
 
@@ -53,6 +52,7 @@ public class SimulationBootStrapper
                     }else
                     {
                         System.out.println("Sitemap file has inconsistent line lengths");
+                        return;
                     }
                 }
             }

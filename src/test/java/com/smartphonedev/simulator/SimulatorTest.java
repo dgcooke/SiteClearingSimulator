@@ -10,10 +10,4 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SimulatorTest
 {
-    @Test
-    @Disabled
-    protected void ifStartedWithoutSiteMapFails()
-    {
-        fail();
-    }
 }

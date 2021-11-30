@@ -1,56 +1,50 @@
 package com.smartphonedev.simulator;
 
-import com.smartphonedev.exceptions.InvalidMapException;
-import com.smartphonedev.exceptions.MissingMapException;
-import com.smartphonedev.exceptions.SimulationException;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
-import org.mockito.Mock;
-
-import java.io.*;
+import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class SimulationBootStrapperTest
 {
 
     @Test
-    @Disabled
-    protected void bootStrapperFailsIfMapIsNotProvided()
+    protected void bootStrapFailsIfMapIsNotProvided()
     {
         //given
-        Executable executable = () -> new SimulationBootStrapper(null);
+        final var strap =  new SimulationBootStrapper(null);
         //when
         //then
-        assertThrows(MissingMapException.class ,executable);
+        assertThat(strap.getSite()).isEmpty();
     }
-
-    @Mock
-    InputStream inputStream;
-
-    @Mock
-    BufferedReader bufferedReader;
 
     @Test
-    @Disabled
-    protected void bootStrapFailsIfEveryRowDoesNotHaveTheSameNumberOfTiles() throws IOException, MissingMapException {
-
+    protected void startSimulationCreatesSiteIfPassedValidInput()
+    {
         //given
-        var args = new String[]{"mysite.txt"};
-        var simulatorBootstrap = new SimulationBootStrapper(args);
-        when(bufferedReader.readLine()).thenReturn("oooooo").thenReturn("rrrrrrrr");
+        var details = "ooorrrrooo\nooorrrrooo\nroorrororo\nororrrroor\n";
+        var stream = new ByteArrayInputStream(details.getBytes(StandardCharsets.UTF_8));
 
         //when
-        Executable executable = () -> simulatorBootstrap.startSimulation(inputStream);
+        final var strap =  new SimulationBootStrapper(null);
+        strap.startSimulation(stream);
 
         //then
-        assertThrows(InvalidMapException.class ,executable);
-
+        assertThat(strap.getSite()).isPresent();
     }
 
+    @Test
+    protected void startSimulationCreatesNoSiteIfPassedInvalidInput()
+    {
+        //given
+        var details = "ooorrrrooo\nooorrrrooo\nroorrororo\nororrrror\n";
+        var stream = new ByteArrayInputStream(details.getBytes(StandardCharsets.UTF_8));
 
+        //when
+        final var strap =  new SimulationBootStrapper(null);
+        strap.startSimulation(stream);
+
+        //then
+        assertThat(strap.getSite()).isEmpty();
+    }
 }

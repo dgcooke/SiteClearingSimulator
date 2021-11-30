@@ -1,16 +1,40 @@
 package com.smartphonedev.site;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class SiteTest
 {
+
+    @Test
+    protected void validatePositionShouldFailIfProposedPositionFallsOutsideOfSite()
+    {
+        //given
+        var siteList = Arrays.asList("ooorrrrooo", "ooorrrrooo", "roorrororo", "ororrrroor");
+        var site = Site.configureSite(siteList);
+
+        var southEast = new Position(3, 10, Direction.SOUTH);
+        var northEast = new Position(0,10, Direction.SOUTH);
+        var southWest = new Position(4, 0,Direction.SOUTH);
+        var northWest = new Position(0, -1, Direction.SOUTH);
+
+        //when
+        var southEastResult = site.get().validatePosition(southEast);
+        var northEastResult = site.get().validatePosition(northEast);
+        var southWestResult = site.get().validatePosition(southWest);
+        var northWestResult = site.get().validatePosition(northWest);
+
+        //then
+        assertThat(southEastResult).isEqualTo(Boolean.FALSE);
+        assertThat(northEastResult).isEqualTo(Boolean.FALSE);
+        assertThat(southWestResult).isEqualTo(Boolean.FALSE);
+        assertThat(northWestResult).isEqualTo(Boolean.FALSE);
+    }
 
     @Test
     protected void configureSiteReturnsEmptySiteWhenPassedNullAsSiteList()
